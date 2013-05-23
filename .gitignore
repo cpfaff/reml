@@ -2,4 +2,5 @@
 .Rhistory
 
 # Example code in package build process
-*-Ex.R
+*-Ex.Rd
+devworkspace.r
