@@ -17,5 +17,5 @@ Imports:
     rjson
 Collate:
     'reml-package.r'
-    'eml.read.R'
-    'helper.R'
+    'eml.read.r'
+    'helper.r'
