@@ -12,8 +12,10 @@ eml.read <- function(eml_url, eml_path) {
   if (!missing(eml_path)) eml_url = eml_path
   eml = xmlParse(eml_url)
 
-  template = list(
-    title = "//dataset/title",
+  template = list( 
+
+    title = "//dataset/title", 
+
     creators = list(
       salutation = "//creator/individualName/salutation",
       givenName = "//creator/individualName/givenName",
@@ -30,35 +32,86 @@ eml.read <- function(eml_url, eml_path) {
       electronicMailAddress = "//creator/electronicMailAddress",
       onlineUrl = "//creator/onlineUrl"),
 
-    abstract = "//dataset/abstract/para",
-    generalTaxonomicCoverage = "//dataset//generalTaxonomicCoverage",
-    samplingDescription = "//dataset//samplingDescription/para",
-    geographicCoverage = list(
-      geographicDescription = "//geographicCoverage/geographicDescription",
-      boundingCoordinates = c(westBoundingCoordinate = "//geographicCoverage/boundingCoordinates/westBoundingCoordinate",
-                    eastBoundingCoordinate = "//geographicCoverage/boundingCoordinates/eastBoundingCoordinate",
-                    northBoundingCoordinate = "//geographicCoverage/boundingCoordinates/northBoundingCoordinate",
-                    southBoundingCoordinate = "//geographicCoverage/boundingCoordinates/southBoundingCoordinate")),
-    temporalCoverage = c(beginDate = "//temporalCoverage//beginDate", endDate = "//temporalCoverage//endDate"))
+      associatedParty = list(
+        references = "//dataset/associatedParty/references", 
+        role = "//dataset/associatedParty/role"),
 
-  out = rapply(template, function(x) xmlNodesValue(path=x, doc=eml), how="replace")
-  out$creators = as.data.frame(out$creators, stringsAsFactors=F)
+      abstract = "//dataset/abstract",  
 
-  attributeList = getNodeSet(eml, path="//attributeList/attribute")
+      keywords = "//keywordSet/keyword",  
 
-  column_template = list(header = "./attributeLabel", description = "./attributeDefinition", unit = ".//unit")
-  columns = lapply(column_template, function(c) {
-    sapply(attributeList, function(d) {
-      xmlNodesValue(doc=d, path=c)
+      contacts = list( 
+        salutation = "//contact/individualName/salutation",
+        givenName = "//contact/individualName/givenName",
+        surName = "//contact/individualName/surName",
+        electronicMailAddress = "//contact/electronicMailAddress",
+        organizationName = "//contact/organizationName",
+        deliveryPoint = "//contact/address/deliveryPoint",
+        city = "//contact/address/city",
+        administrativeArea = "//contact/address/administrativeArea",
+        postalCode = "//contact/address/postalCode",
+        country = "//contact/address/postalCode",
+        phone = "//contact/phone[@phonetype='voice']",
+        fax = "//contact/phone[@phonetype='fax']",
+        electronicMailAddress = "//contact/electronicMailAddress",
+        onlineUrl = "//contact/onlineUrl"),
+
+      samplingDescription = "//dataset//samplingDescription",  
+
+      intellectualRights = "//dataset/intellectualRights", 
+
+      # coverage  
+
+      geographicCoverage = list(
+        geographicDescription = "//geographicCoverage/geographicDescription",
+        boundingCoordinates = c(westBoundingCoordinate = "//geographicCoverage/boundingCoordinates/westBoundingCoordinate",
+          eastBoundingCoordinate = "//geographicCoverage/boundingCoordinates/eastBoundingCoordinate",
+          northBoundingCoordinate = "//geographicCoverage/boundingCoordinates/northBoundingCoordinate",
+          southBoundingCoordinate = "//geographicCoverage/boundingCoordinates/southBoundingCoordinate")),  
+
+      temporalCoverage = list(
+        beginDate = "//temporalCoverage//beginDate", 
+        endDate = "//temporalCoverage//endDate"
+      ),
+      
+      taxonomicSystem = list( 
+        title = "//coverage//taxonomicCoverage//title", 
+        creator = "//coverage//taxonomicCoverage//creator",
+        publicationDate = "//coverage//taxonomicCoverage//pubDate", 
+        journal = "//coverage//taxonomicCoverage//journal",
+        volume = "//coverage//taxonomicCoverage//volume",
+        issue = "//coverage//taxonomicCoverage//issue",
+        pageRange = "//coverage//taxonomicCoverage//pageRange",
+        publisher = "//coverage//taxonomicCoverage//publisher", 
+        identifierName = "//coverage//taxonomicCoverage//identifierName",
+        taxonomicProcedures = "//coverage//taxonomicCoverage//taxonomicProcedures"
+      ),  
+
+      taxonomicClassification = "//taxonomicClassification"
+    ) 
+
+    out = rapply(template, function(x) xmlNodesValue(path=x, doc=eml), how="replace") 
+
+    out$creators = as.data.frame(out$creators, stringsAsFactors=F) 
+     
+    out$contacts = as.data.frame(out$contacts, stringsAsFactors=F) 
+
+    attributeList = getNodeSet(eml, path="//attributeList/attribute")
+
+    column_template = list(header = "./attributeLabel", description = "./attributeDefinition", unit = ".//unit") 
+
+    columns = lapply(column_template, function(c) { 
+      sapply(attributeList, function(d) {
+        xmlNodesValue(doc=d, path=c)
+      })
     })
-  })
 
-  columns = as.data.frame(columns, stringsAsFactors=F)
+    columns = as.data.frame(columns, stringsAsFactors=F)
 
-  if (nrow(columns)) {
-    columns$unit = as.character(columns$unit)
-    columns$unit[is.na(columns$unit) | columns$unit == "dimensionless"] = "dimensionless"
-    out$columns = columns
-  }
-  return(out)
+    if (nrow(columns)) {
+      columns$unit = as.character(columns$unit)
+      columns$unit[is.na(columns$unit) | columns$unit == "dimensionless"] = "dimensionless"
+      out$columns = columns
+    }
+    return(out)
 }
