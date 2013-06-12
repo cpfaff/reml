@@ -3,10 +3,10 @@ Maintainer: Claas-Thido Pfaff <claas-thido.pfaff@uni-leipzig.de>
 Author: Claas-Thido Pfaff
 Version: 0.1
 License: GPL-3
-Title: Use reml to import data along EML conventions
+Title: The reml package to import data along EML conventions
 Description: This package enables you to read and write Ecological Metadata
     Language files. It leverages the import of datasets into the R environment
-    along the conventions of EML.
+    along the conventions of EML for analysis.
 URL: https://github.com/cpfaff/R-EML
 Suggests:
     ggplot2,
@@ -14,7 +14,8 @@ Suggests:
 Imports:
     XML,
     RCurl,
-    rjson
+    rjson,
+    testthat
 Collate:
     'reml-package.r'
     'eml.read.r'

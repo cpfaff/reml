@@ -6,6 +6,6 @@
 \description{
   The package allows to read and write Ecological Metadtata
   Language (EML) files and to import datasets along the
-  conventions of EML.
+  conventions of EML
 }
 

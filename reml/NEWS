@@ -1,0 +1,5 @@
+reml 0.1 
+------------------------------------------
+
+* The initial version provides read access to EML files and 
+  imports csv data given in the EML file. 
