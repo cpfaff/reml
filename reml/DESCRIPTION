@@ -19,4 +19,5 @@ Imports:
 Collate:
     'reml-package.r'
     'eml.read.r'
+    'eml.schemes.r'
     'helper.r'
