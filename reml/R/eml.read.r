@@ -20,15 +20,31 @@ eml.read <- function(eml_url, eml_path) {
   }
 
   if(xmlSize(getNodeSet(eml, "//citation"))) {
-     citation_field_values = rapply(dataset, function(x) xmlNodesValue(path=x, doc=eml), how="replace") 
+    citation_field_values = rapply(citation, function(x) xmlNodesValue(path=x, doc=eml), how="replace")  
+    citation_field_values$creators = as.data.frame(citation_field_values$creators, stringsAsFactors=F) 
     return(citation_field_values)
   } else {
     warning("There is no nodeset for citation") 
   }
+
+  if(xmlSize(getNodeSet(eml, "//software"))) {
+     software_field_values = rapply(software, function(x) xmlNodesValue(path=x, doc=eml), how="replace") 
+    return(software_field_values)
+  } else {
+    warning("There is no nodeset for software") 
+  }
+
+  if(xmlSize(getNodeSet(eml, "//protocol"))) {
+     protocol_field_values = rapply(protocol, function(x) xmlNodesValue(path=x, doc=eml), how="replace") 
+    return(protocol_field_values)
+  } else {
+    warning("There is no nodeset for protocol") 
+  } 
+
+  # TODO Improve the above section to collect only all fields. Then put it together here before return
+
 } 
 
-    # out$creators = as.data.frame(out$creators, stringsAsFactors=F) 
-    # out$contacts = as.data.frame(out$contacts, stringsAsFactors=F) 
 
     # attributeList = getNodeSet(eml, path="//attributeList/attribute")
 
