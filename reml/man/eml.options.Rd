@@ -1,24 +1,19 @@
 \name{eml.options}
 \alias{eml.options}
-\title{Set or query otions related to the emldata R package.}
+\title{Set or query otions related to the reml package.}
 \usage{
   eml.options(...)
 }
 \arguments{
-  \item{\dots}{similar to \code{\link{options}}. see
-  examples below.}
+  \item{\dots}{similar to \code{\link{options}}.}
 }
 \description{
-  This function is used to query and set R emldata package
-  specific options like the URL to the emldata portal and
-  the URL to the tematres thesaurus.
+  This function is used to query and set the reml package
+  specific options like the download folrder or the
+  specification location and version.
 }
 \examples{
-# emldata URL
-eml.options('')
-eml.options(url='http://www.example.com')
-#Tematres URL
-eml.options('temtres_url')
-eml.options(tematres_url="http://www.example.com")
+# emldata URL eml.options('')
+eml.options(download_folder='foldername')
 }
 
