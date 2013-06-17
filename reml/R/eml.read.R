@@ -14,6 +14,7 @@ eml.read <- function(eml_url, eml_path) {
  
   if(xmlSize(getNodeSet(eml, "//dataset"))) {
     dataset_field_values = rapply(dataset, function(x) xmlNodesValue(path=x, doc=eml), how="replace") 
+    dataset_field_values$creators = as.data.frame(dataset_field_values$creators, stringsAsFactors=F) 
     return(dataset_field_values)
   } else {
     warning("There is no nodeset for dataset") 

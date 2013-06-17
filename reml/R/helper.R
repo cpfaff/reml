@@ -4,10 +4,10 @@ xmlNodesValue <- function(doc, path){
   out = Filter(function(x) x!="", out)
   if (length(out) == 0) return(NA)
   out
-} 
+}
 
 # Helper that determines if internet connection is available
-is_internet_connected <- function() {
+internet_connected <- function() {
   if (.Platform$OS.type == "windows") {
     ipmessage <- system("ipconfig", intern = TRUE)
   } else {
@@ -19,3 +19,14 @@ is_internet_connected <- function() {
   }
 }
 
+# Check if the document is valid according to the schema
+xml_validation <- function(schema = NULL, document = NULL) {
+  xsd = xmlTreeParse(schema, isSchema =TRUE, useInternal = TRUE)
+  doc = xmlParse(document)
+  validation = xmlSchemaValidate(xsd, doc)
+  if (validation$status == 0) {
+    return(TRUE)
+  } else {
+    return(validation[[2]])
+  }
+}

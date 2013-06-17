@@ -17,7 +17,9 @@ Imports:
     rjson,
     testthat
 Collate:
-    'reml-package.r'
-    'eml.read.r'
-    'eml.schemes.r'
-    'helper.r'
+    'eml.options.R'
+    'reml-package.R'
+    'eml.read.R'
+    'helper.R'
+    'zzz.R'
+    'eml.schema.R'
